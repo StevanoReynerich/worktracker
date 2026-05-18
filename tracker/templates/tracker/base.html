@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fortnight Tracker</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding: 24px 18px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .logout {
+            color: #667085;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+            margin-bottom: 18px;
+        }
+
+        .primary-card {
+            background: linear-gradient(135deg, #111827, #2563eb);
+            color: white;
+        }
+
+        .muted {
+            color: #667085;
+            font-size: 14px;
+        }
+
+        .primary-card .muted {
+            color: rgba(255,255,255,0.75);
+        }
+
+        .big-number {
+            font-size: 44px;
+            font-weight: 900;
+            margin: 8px 0;
+        }
+
+        .progress-bg {
+            height: 12px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 18px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 999px;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            background: #2563eb;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .secondary-button {
+            background: #eef4ff;
+            color: #2563eb;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d0d5dd;
+            border-radius: 14px;
+            font-size: 15px;
+            box-sizing: border-box;
+            margin-top: 6px;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .log-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .log-row:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            background: #eef4ff;
+            color: #2563eb;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+    }
+
+    .day-card {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 12px 8px;
+        text-align: center;
+        min-height: 82px;
+        border: 1px solid #eef2f6;
+    }
+
+    .day-card.worked {
+        background: #eef4ff;
+        border-color: #bfdbfe;
+    }
+
+    .day-name {
+        font-size: 12px;
+        font-weight: 700;
+        color: #667085;
+    }
+
+    .day-number {
+        font-size: 20px;
+        font-weight: 900;
+        margin-top: 4px;
+    }
+
+    .day-hours {
+        margin-top: 8px;
+        font-size: 12px;
+        font-weight: 800;
+        color: #2563eb;
+    }
+
+    .day-empty {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #98a2b3;
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

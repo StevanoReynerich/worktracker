@@ -1,0 +1,104 @@
+{% extends "tracker/base.html" %}
+
+{% block content %}
+
+<div class="topbar">
+    <div class="brand">Fortnight Tracker</div>
+
+    <a href="{% url 'logout' %}" class="logout">
+        Logout
+    </a>
+</div>
+
+<div class="card primary-card">
+
+    <div
+        style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:20px;
+        "
+    >
+
+        <div>
+            <div class="muted">
+                Hours used in last 14 days
+            </div>
+
+            <div class="big-number">
+                {{ used_hours }}h {{ used_minutes }}m
+            </div>
+
+            <div class="muted">
+                {{ left_hours }}h {{ left_minutes }}m left from 48h
+            </div>
+        </div>
+
+        <div
+            style="
+                width:110px;
+                height:110px;
+                border-radius:999px;
+                background:
+                    conic-gradient(
+                        white {{ percent_used }}%,
+                        rgba(255,255,255,0.18) 0
+                    );
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                flex-shrink:0;
+            "
+        >
+            <div
+                style="
+                    width:82px;
+                    height:82px;
+                    border-radius:999px;
+                    background:#1e3a8a;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-weight:800;
+                    font-size:20px;
+                "
+            >
+                {{ percent_used }}%
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<a href="{% url 'add_work_log' %}" class="button">
+    + Add Work Time
+</a>
+
+<div style="height: 18px;"></div>
+
+<div class="card">
+    <div style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">
+        14-Day Calendar
+    </div>
+
+    <div class="calendar-grid">
+        {% for day in calendar_days %}
+            <div class="day-card {% if day.has_work %}worked{% endif %}">
+                <div class="day-name">{{ day.day_name }}</div>
+                <div class="day-number">{{ day.day_number }}</div>
+
+                {% if day.has_work %}
+                    <div class="day-hours">
+                        {{ day.hours }}h {{ day.minutes }}m
+                    </div>
+                {% else %}
+                    <div class="day-empty">0h</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "tracker/base.html" %}
+
+{% block content %}
+
+<div class="topbar">
+    <div class="brand">Add Work Time</div>
+    <a href="{% url 'dashboard' %}" class="logout">Back</a>
+</div>
+
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Work date</label>
+            {{ form.work_date }}
+        </div>
+
+        <div class="form-group">
+            <label>Hours</label>
+            {{ form.hours }}
+        </div>
+
+        <div class="form-group">
+            <label>Minutes</label>
+            {{ form.minutes }}
+        </div>
+
+        <div class="form-group">
+            <label>Note</label>
+            {{ form.note }}
+        </div>
+
+        <button type="submit" class="button">
+            Save Work Time
+        </button>
+    </form>
+</div>
+
+{% endblock %}
