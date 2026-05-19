@@ -4,12 +4,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-ua-@a!#qh+k^1wnt(jk$2_nmu&qm#bqab#a*^w#f=gpvaslfv9"
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "worktracker-lbur.onrender.com",
     "127.0.0.1",
     "localhost",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://worktracker-lbur.onrender.com",
 ]
 
 INSTALLED_APPS = [
