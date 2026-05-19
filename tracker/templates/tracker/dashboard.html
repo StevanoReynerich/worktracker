@@ -11,16 +11,7 @@
 </div>
 
 <div class="card primary-card">
-
-    <div
-        style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:20px;
-        "
-    >
-
+    <div class="summary-layout">
         <div>
             <div class="muted">
                 Hours used in last 14 days
@@ -35,41 +26,12 @@
             </div>
         </div>
 
-        <div
-            style="
-                width:110px;
-                height:110px;
-                border-radius:999px;
-                background:
-                    conic-gradient(
-                        white {{ percent_used }}%,
-                        rgba(255,255,255,0.18) 0
-                    );
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                flex-shrink:0;
-            "
-        >
-            <div
-                style="
-                    width:82px;
-                    height:82px;
-                    border-radius:999px;
-                    background:#1e3a8a;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    font-weight:800;
-                    font-size:20px;
-                "
-            >
+        <div class="progress-ring" style="--percent: {{ percent_used }}%;">
+            <div class="progress-ring-inner">
                 {{ percent_used }}%
             </div>
         </div>
-
     </div>
-
 </div>
 
 <a href="{% url 'add_work_log' %}" class="button">
@@ -79,7 +41,7 @@
 <div style="height: 18px;"></div>
 
 <div class="card">
-    <div style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">
+    <div class="section-title">
         14-Day Calendar
     </div>
 
