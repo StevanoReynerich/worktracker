@@ -47,7 +47,11 @@
 
     <div class="calendar-grid">
         {% for day in calendar_days %}
-            <div class="day-card {% if day.has_work %}worked{% endif %}">
+            <button
+                type="button"
+                class="day-card {% if day.has_work %}worked{% endif %}"
+                onclick="openSheet('sheet-{{ day.date_key }}')"
+            >
                 <div class="day-name">{{ day.day_name }}</div>
                 <div class="day-number">{{ day.day_number }}</div>
 
@@ -58,9 +62,88 @@
                 {% else %}
                     <div class="day-empty">0h</div>
                 {% endif %}
+            </button>
+
+            <div id="sheet-{{ day.date_key }}" class="sheet-overlay">
+                <div class="bottom-sheet">
+                    <div class="sheet-handle"></div>
+
+                    <div class="sheet-header">
+                        <div>
+                            <div class="sheet-title">{{ day.date }}</div>
+                            <div class="muted">
+                                Total: {{ day.hours }}h {{ day.minutes }}m
+                            </div>
+                        </div>
+
+                        <button class="icon-button" onclick="closeSheet('sheet-{{ day.date_key }}')">
+                            ✕
+                        </button>
+                    </div>
+
+                    {% if day.logs %}
+                        <div class="entry-list">
+                            {% for log in day.logs %}
+                                <div class="entry-card">
+                                    <div>
+                                        <div class="entry-time">
+                                            {{ log.hours }}h {{ log.minutes }}m
+                                        </div>
+
+                                        {% if log.note %}
+                                            <div class="muted">{{ log.note }}</div>
+                                        {% else %}
+                                            <div class="muted">No note</div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="entry-actions">
+                                        <a href="{% url 'edit_work_log' log.id %}" class="small-action">
+                                            Edit
+                                        </a>
+
+                                        <form method="post" action="{% url 'delete_work_log' log.id %}">
+                                            {% csrf_token %}
+                                            <button
+                                                type="submit"
+                                                class="small-action danger"
+                                                onclick="return confirm('Delete this work log?')"
+                                            >
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            No work time logged for this date.
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
     </div>
 </div>
+
+<script>
+    function openSheet(id) {
+        document.getElementById(id).classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeSheet(id) {
+        document.getElementById(id).classList.remove("active");
+        document.body.style.overflow = "";
+    }
+
+    document.addEventListener("click", function(event) {
+        if (event.target.classList.contains("sheet-overlay")) {
+            event.target.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+    });
+</script>
 
 {% endblock %}

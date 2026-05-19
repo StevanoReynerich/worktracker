@@ -1,7 +1,8 @@
 from datetime import timedelta
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
 from .forms import WorkLogForm
@@ -34,11 +35,13 @@ def dashboard(request):
 
         calendar_days.append({
             "date": day,
+            "date_key": day.strftime("%Y-%m-%d"),
             "day_name": day.strftime("%a"),
             "day_number": day.day,
             "hours": total_minutes // 60,
             "minutes": total_minutes % 60,
             "has_work": total_minutes > 0,
+            "logs": day_logs,
         })
 
     context = {
@@ -63,8 +66,51 @@ def add_work_log(request):
             work_log = form.save(commit=False)
             work_log.user = request.user
             work_log.save()
+            messages.success(request, "Work log added.")
             return redirect("dashboard")
     else:
         form = WorkLogForm(initial={"work_date": timezone.localdate()})
 
-    return render(request, "tracker/add_work_log.html", {"form": form})
+    return render(request, "tracker/add_work_log.html", {
+        "form": form,
+        "is_edit": False,
+    })
+
+
+@login_required
+def edit_work_log(request, log_id):
+    work_log = get_object_or_404(
+        WorkLog,
+        id=log_id,
+        user=request.user
+    )
+
+    if request.method == "POST":
+        form = WorkLogForm(request.POST, instance=work_log)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Work log updated.")
+            return redirect("dashboard")
+    else:
+        form = WorkLogForm(instance=work_log)
+
+    return render(request, "tracker/add_work_log.html", {
+        "form": form,
+        "is_edit": True,
+    })
+
+
+@login_required
+def delete_work_log(request, log_id):
+    work_log = get_object_or_404(
+        WorkLog,
+        id=log_id,
+        user=request.user
+    )
+
+    if request.method == "POST":
+        work_log.delete()
+        messages.success(request, "Work log deleted.")
+
+    return redirect("dashboard")

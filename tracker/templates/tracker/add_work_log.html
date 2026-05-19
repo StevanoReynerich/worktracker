@@ -3,9 +3,15 @@
 {% block content %}
 
 <div class="topbar">
-    <div class="brand">Add Work Time</div>
+    <div class="brand">
+        {% if is_edit %}Edit Work Time{% else %}Add Work Time{% endif %}
+    </div>
     <a href="{% url 'dashboard' %}" class="logout">Back</a>
 </div>
+
+<button type="submit" class="button">
+    {% if is_edit %}Save Changes{% else %}Save Work Time{% endif %}
+</button>
 
 <div class="card">
     <form method="post">
