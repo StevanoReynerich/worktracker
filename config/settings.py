@@ -16,6 +16,9 @@ CSRF_TRUSTED_ORIGINS = [
     "https://worktracker-lbur.onrender.com",
 ]
 
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
