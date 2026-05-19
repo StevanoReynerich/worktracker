@@ -56,9 +56,13 @@
                 <div class="day-number">{{ day.day_number }}</div>
 
                 {% if day.has_work %}
-                    <div class="day-hours">{{ day.hours }}h {{ day.minutes }}m</div>
+                    <div class="day-hours">
+                        {{ day.hours }}h {{ day.minutes }}m
+                    </div>
                 {% else %}
-                    <div class="day-empty">0h</div>
+                    <div class="day-empty">
+                        0h
+                    </div>
                 {% endif %}
             </button>
         {% endfor %}
@@ -72,42 +76,66 @@
 
             <div class="sheet-header">
                 <div>
-                    <div class="sheet-title">{{ day.date }}</div>
-                    <div class="muted">Total: {{ day.hours }}h {{ day.minutes }}m</div>
+                    <div class="sheet-title">
+                        {{ day.date }}
+                    </div>
+
+                    <div class="muted">
+                        Total: {{ day.hours }}h {{ day.minutes }}m
+                    </div>
                 </div>
 
-                <button class="icon-button" onclick="closeSheet('sheet-{{ day.date_key }}')">
+                <button
+                    type="button"
+                    class="icon-button"
+                    onclick="closeSheet('sheet-{{ day.date_key }}')"
+                >
                     ✕
                 </button>
             </div>
 
             {% if day.logs %}
-                {% for log in day.logs %}
-                    <div class="entry-card">
-                        <div>
-                            <div class="entry-time">{{ log.hours }}h {{ log.minutes }}m</div>
+                <div class="entry-list">
+                    {% for log in day.logs %}
+                        <div class="entry-card">
+                            <div>
+                                <div class="entry-time">
+                                    {{ forloop.counter }}. {{ log.hours }}h {{ log.minutes }}m
+                                </div>
 
-                            {% if log.note %}
-                                <div class="muted">{{ log.note }}</div>
-                            {% else %}
-                                <div class="muted">No note</div>
-                            {% endif %}
+                                {% if log.note %}
+                                    <div class="muted">
+                                        {{ log.note }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="entry-actions">
+                                <a
+                                    href="{% url 'edit_work_log' log.id %}"
+                                    class="small-action"
+                                >
+                                    Edit
+                                </a>
+
+                                <form
+                                    method="post"
+                                    action="{% url 'delete_work_log' log.id %}"
+                                >
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="small-action danger"
+                                        onclick="return confirm('Delete this entry?')"
+                                    >
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-
-                        <div class="entry-actions">
-                            <a href="{% url 'edit_work_log' log.id %}" class="small-action">
-                                Edit
-                            </a>
-
-                            <form method="post" action="{% url 'delete_work_log' log.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="small-action danger">
-                                    Delete
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             {% else %}
                 <div class="empty-state">
                     No data
@@ -119,18 +147,36 @@
 
 <script>
     function openSheet(id) {
-        document.getElementById(id).classList.add("active");
+        const sheet = document.getElementById(id);
+
+        if (!sheet) return;
+
+        sheet.classList.add("active");
         document.body.style.overflow = "hidden";
     }
 
     function closeSheet(id) {
-        document.getElementById(id).classList.remove("active");
+        const sheet = document.getElementById(id);
+
+        if (!sheet) return;
+
+        sheet.classList.remove("active");
         document.body.style.overflow = "";
     }
 
     document.addEventListener("click", function(event) {
         if (event.target.classList.contains("sheet-overlay")) {
             event.target.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+    });
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            document.querySelectorAll(".sheet-overlay.active").forEach(function(sheet) {
+                sheet.classList.remove("active");
+            });
+
             document.body.style.overflow = "";
         }
     });
